@@ -9,15 +9,15 @@
     "default"
   ],
   "start-scene": "current",
-  "design-resolution-width": 1125,
-  "design-resolution-height": 1881,
+  "design-resolution-width": 1080,
+  "design-resolution-height": 1920,
   "fit-width": true,
   "fit-height": false,
   "use-project-simulator-setting": false,
   "simulator-orientation": false,
   "use-customize-simulator": false,
   "simulator-resolution": {
-    "width": 1125,
-    "height": 1881
+    "width": 1080,
+    "height": 1920
   }
 }

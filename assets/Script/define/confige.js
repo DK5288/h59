@@ -89,6 +89,10 @@ var cfg = {
   GVoiceIsInit : false,
   GVoiceRoomID : -1,
 
+
+  enterSceneIndex : 0,
+
+
   loadNode : {},
   curGameScene : {},
   ON_LOGIN : 1000,

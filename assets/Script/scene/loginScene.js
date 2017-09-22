@@ -9,9 +9,10 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        confige.enterSceneIndex = 0;        //0:hall;1:user;2:game;
         confige.loginType = 0;
         pomeloClient();
-        pomelo.clientLogin("1111","1111212");
+        pomelo.clientLogin("1112","1111212");
     },
 
     // called every frame

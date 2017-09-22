@@ -93,7 +93,10 @@ var cfg = function(){
                         }else{                      //没有则直接进入大厅界面
                             if(confige.curReconnectType != confige.ON_OVER)     //当处于结算界面时,不自动跳回大厅界面;
                             {
-                                cc.director.loadScene('hallScene');
+                                if(confige.enterSceneIndex == 0)
+                                    cc.director.loadScene('hallScene');
+                                else if(confige.enterSceneIndex == 1)
+                                    cc.director.loadScene('userScene'); 
                                 confige.resetGameData();
                             }
                         }
@@ -547,8 +550,8 @@ var cfg = function(){
                 }
             );           
         };
-        confige.host = "update.5d8d.com";    //测试外网
-        // confige.host = "192.168.1.65";          //内网
+        // confige.host = "update.5d8d.com";    //测试外网
+        confige.host = "192.168.1.65";          //内网
         pomelo.clientLogin = function(uid,clientLogintoken) {
             console.log("pomelo try to login!!!!!!");
             var route = 'gate.gateHandler.queryEntry';

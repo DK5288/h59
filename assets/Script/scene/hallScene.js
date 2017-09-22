@@ -27,32 +27,61 @@ cc.Class({
         this.cardNumLabel = this.userInfoNode.getChildByName("cardNum").getComponent("cc.Label");
         this.nicknameLabel = this.userInfoNode.getChildByName("nickname").getComponent("cc.Label");
 
-        // this.cardNumLabel.string = confige.curDiamond + "张";
-        // this.nicknameLabel.string = confige.userInfo.nickname;
+        this.cardNumLabel.string = confige.curDiamond + "张";
+        this.nicknameLabel.string = confige.userInfo.nickname;
     },
 
     selectScore:function(event, customEventData){
         var index = parseInt(customEventData);
+        this.basicScore = index;
     },
     selectRule:function(event, customEventData){
         var index = parseInt(customEventData);
+        this.awardType = index;
     },
     selectRound:function(event, customEventData){
         var index = parseInt(customEventData);
+        if(index == 1)
+        {
+            if(this.playerMode == 1)
+                this.gameTime = 10;
+            else if(this.playerMode == 2)
+                this.gameTime = 20;
+        }else if(index == 2){
+            if(this.playerMode == 1)
+                this.gameTime = 12;
+            else if(this.playerMode == 2)
+                this.gameTime = 24;
+        }
     },
     selectCardtype:function(event, customEventData){
         var index = parseInt(customEventData);
+        if(index == 1)
+        {
+            if(this.wuhuaniu)
+                this.wuhuaniu = false;
+            else 
+                this.wuhuaniu = true;
+        }else if(index == 2){
+            if(this.zhadanniu)
+                this.zhadanniu = false;
+            else 
+                this.zhadanniu = true;
+        }else if(index == 3){
+            if(this.wuxiaoniu)
+                this.wuxiaoniu = false;
+            else 
+                this.wuxiaoniu = true;
+        }
     },
     selectMode:function(event, customEventData){
         var index = parseInt(customEventData);
     },
-    selectCardtype:function(event, customEventData){
-        var index = parseInt(customEventData);
-    },
 
-    btnGameModeClick:function(event, customEventData){
+    btnplayModeClick:function(event, customEventData){
         var index = parseInt(customEventData);
         if (index == 1) {
+            console.log("121211221")
             this.showRoomInfoByIndex(index);
         }else if(index == 2){
             this.showRoomInfoByIndex(index);
@@ -61,15 +90,91 @@ cc.Class({
 
     initRoomInfoLayer:function(){
         this.createRoomLayer = this.node.getChildByName("createRoomLayer");
+        this.scoreSelectNode = this.createRoomLayer.getChildByName("scoreSelect");
+        this.ruleSelectNode = this.createRoomLayer.getChildByName("ruleSelect");
+        this.roundSelectNode = this.createRoomLayer.getChildByName("roundSelect");
+        this.cardtypeSelectNode = this.createRoomLayer.getChildByName("cardtypeSelect");
+        this.wuhuaniuNode = this.cardtypeSelectNode.getChildByName("cardtype1");
+        this.zhadanniuNode = this.cardtypeSelectNode.getChildByName("cardtype2");
+        this.wuxiaoniuNode = this.cardtypeSelectNode.getChildByName("cardtype3");
+        this.resetRoomInfoLayer();
+        
         this.roundDes1 = this.createRoomLayer.getChildByName("roundSelect").getChildByName("des1").getComponent("cc.Label");
         this.roundDes2 = this.createRoomLayer.getChildByName("roundSelect").getChildByName("des2").getComponent("cc.Label");
     },
 
+    resetRoomInfoLayer:function(){
+        this.playerMode = 1;
+        this.gameTime = 10;
+        this.basicScore = 1;
+        this.awardType = 0;
+        this.wuhuaniu = false;
+        this.zhadanniu = false;
+        this.wuxiaoniu = false;
+        this.playerCount = 6;
+
+        this.wuhuaniuNode.getComponent("cc.Toggle").isChecked = false;
+        this.zhadanniuNode.getComponent("cc.Toggle").isChecked = false;
+        this.wuxiaoniuNode.getComponent("cc.Toggle").isChecked = false;
+
+        this.scoreSelectNode.getChildByName("toggle1").getComponent("cc.Toggle").isChecked = true;
+        this.ruleSelectNode.getChildByName("toggle1").getComponent("cc.Toggle").isChecked = true;
+        this.roundSelectNode.getChildByName("toggle1").getComponent("cc.Toggle").isChecked = true;
+    },
+
     showRoomInfoByIndex:function(index){
+        this.resetRoomInfoLayer();
         this.createRoomLayer.active = true;
+        this.playerMode = index;
+        if(this.playerMode == 1){
+            this.gameTime = 10;
+            this.playerCount = 6;
+            this.roundDes1.string = "10局X1房卡";
+            this.roundDes2.string = "20局X2房卡";
+        }else if(this.playerMode == 2){
+            this.gameTime = 12;
+            this.playerCount = 9;
+            this.roundDes1.string = "12局X1房卡";
+            this.roundDes2.string = "24局X2房卡";
+        }
     },
 
     btnCreateRoomOK:function(){
+        pomelo.request("connector.entryHandler.sendData", {"code" : "agency","params" : {
+            playerCount:this.playerCount,gameNumber: this.gameTime, gameType: "mingpaiqz",basic: this.basicScore,halfwayEnter: true,isWait:false,
+            awardType:this.awardType,wuhuaniu:this.wuhuaniu,zhadanniu:this.zhadanniu,wuxiaoniu:this.wuxiaoniu}}, function(data) {
+                console.log("clientCreateRoom flag is : " + data.flag)
+                console.log(data);
+                var curRoomID = data.msg.roomId;
+                if(data.flag == true)
+                {
+                    pomelo.clientSend("join",{"roomId":curRoomID}, function(data) {
+                        console.log("join room @@@@@@@");
+                        console.log(data);
+
+                        pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : curRoomID}, function(data) {
+                            console.log(data);
+                        });
+                    });
+                    console.log("getRoomInfo@@@@@@@");
+                }
+                
+                // if(data.flag == false)
+                // {
+                //     if(data.msg && data.msg.code)
+                //     {
+                //         pomelo.clientScene.showTips(tipsConf[data.msg.code]);
+                //     }else{
+                //         pomelo.clientScene.showTips("创建房间失败,请重新创建!");
+                //     }
+                // }else{
+                //     console.log("data.flag == true");
+                //     if(createType == "newRoom")
+                //         if(data.msg && data.msg.roomId)
+                //             pomelo.clientScene.showTips("创建房间成功!\n房间号为:" + data.msg.roomId, 1);
+                // }
+            }
+        );
         this.createRoomLayer.active = false;
     },
 
