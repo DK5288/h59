@@ -21,7 +21,8 @@ cc.Class({
         this.btnCheck = this.userInfoNode.getChildByName("btnCheck");
         // this.cardNumLabel.string = confige.curDiamond + "张";
         // this.nicknameLabel.string = confige.userInfo.nickname;
-
+        confige.getWXHearFrameNoSave(confige.userInfo.head,this.headSprite);
+        
         this.cardNumLabel.string = confige.curDiamond + "张";
         this.nicknameLabel.string = confige.userInfo.nickname;
         this.phoneNumLabel = this.userInfoNode.getChildByName("phoneNum").getComponent("cc.Label");

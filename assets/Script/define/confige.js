@@ -107,9 +107,9 @@ var cfg = {
 };
 
 
-cfg.curVersion = "1.3.73";
+cfg.curVersion = "1.2.024";
 cfg.oriPaomaText = "和谐游戏，拒绝赌博，如若发现，封号并提交公安机关处理。有事咨询客服，客服微信号：YCYX1818";
-cfg.versionCheck = "1.3.501&LKSADHFKASKDJLSAFDHJ";
+cfg.versionCheck = "1.2.024&KSAJDGFKJASHDFGASHDGAFDGH";
 cfg.resetGameData = function(){
   cfg.gameSceneLoadData = [];
   cfg.curReconnectData = -1;
@@ -125,21 +125,22 @@ cfg.resetGameData = function(){
 
 //h5
 cfg.h5InviteCode = "0";
+cfg.h5SceneID = "0";
 cfg.h5RoomID = "0";
-cfg.h5SignID = "wxd72486a200bde1db";
+cfg.h5SignID = "wxc36a5e9d4a56e1c2";
 cfg.h5SignTime = "";
 cfg.h5SignTicket = "";
 cfg.h5SignSignature = "";
 cfg.h5SignStr = "niuniuH5";
 cfg.h5SignURL = "";
-cfg.h5LoginUrl = "http://pay.5d8d.com/H5Index/nnH5?room_num=0";
-cfg.h5ShareUrlNew = "http://pay.5d8d.com/H5Index/nnH5?room_num=ROOMNUM";
-cfg.h5ShareIco = "http://update.5d8d.com/niuniuH5/MP_ICO.png";
+cfg.h5LoginUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
+cfg.h5ShareUrlNew = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
+cfg.h5ShareIco = "";
 console.log("分享路径22222===="+cfg.h5ShareUrlNew);
 console.log("完整路径222===="+cfg.h5SignURL + cfg.h5ShareIco);
 //
 cfg.loginType = 0;   //0:游客登陆;1:微信登陆;2:h5微信登录
-cfg.h5ShareUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd72486a200bde1db&redirect_uri=http%3a%2f%2fpay.5d8d.com%2fNN%2fnnH5%3froom_num%3dROOMNUM&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+cfg.h5ShareUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
 // cfg.code_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf0e81c3bee622d60&redirect_uri=http%3A%2F%2Fnba.bluewebgame.com%2Foauth_response.php&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect ";
 cfg.access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
 cfg.refresh_token_url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN";
@@ -158,8 +159,8 @@ cfg.WXHeadFrameList = {};
 //
 cfg.payURL = "http://pay.5d8d.com/index.php/Tips/showpay";
 cfg.shareURL = "http://d.5d8d.com/index.php/Download/niuniu2"; //"http://game.37yiyou.cn/download/nngame/download.html?from=groupmessage";
-cfg.shareTitle = "我爱牛牛,点击可玩,无需下载";
-cfg.shareDes = "我爱牛牛H5,安全无挂,放心畅玩!";
+cfg.shareTitle = "新大番薯测试";
+cfg.shareDes = "快来玩吧";
 //
 cfg.playSoundByName = function(curName){
   if(cfg.audioList[curName])
@@ -184,6 +185,19 @@ cfg.getWXHearFrame = function(headUrl,index,cb) {
 
     if(cb)
       cb();
+  });
+};
+
+cfg.getWXHearFrameNoSave = function(headUrl,sprite) {
+  if(headUrl == "")
+    return;
+  console.log("WXHead index 2222");
+  // headUrl = headUrl + ".jpg";
+  //console.log("WXHead URL === " + headUrl);
+  cc.loader.load({url:headUrl,type:'png'}, function (err, texture) {
+    var newFrame = new cc.SpriteFrame(texture);
+    if(sprite)
+      sprite.spriteFrame = newFrame;
   });
 };
 

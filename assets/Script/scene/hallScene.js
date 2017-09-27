@@ -10,6 +10,13 @@ cc.Class({
     onLoad: function () {
         this.initUserInfo();
         this.initRoomInfoLayer();
+
+        pomelo.clientScene = this;
+        confige.curGameScene = this;
+        confige.curSceneIndex = 1;
+
+        if(cc.sys.platform == cc.sys.MOBILE_BROWSER)
+            this.initWXShare();
     },
 
     // called every frame
@@ -29,6 +36,8 @@ cc.Class({
 
         this.cardNumLabel.string = confige.curDiamond + "张";
         this.nicknameLabel.string = confige.userInfo.nickname;
+
+        confige.getWXHearFrameNoSave(confige.userInfo.head,this.headSprite);
     },
 
     selectScore:function(event, customEventData){
@@ -180,5 +189,54 @@ cc.Class({
 
     btnCreateRoomClose:function(){
         this.createRoomLayer.active = false;
+    },
+
+    joinRoom:function(){
+        var curRoomID = parseInt(this.node.getChildByName("roomNum").getComponent("cc.EditBox").string);
+        console.log("curRoomID === "+curRoomID);
+
+        // pomelo.request("connector.entryHandler.sendData",{"code" : "join","params" : {"roomId" : curRoomID}},function(data) {
+        //     console.log(data)
+        // });
+
+
+        pomelo.clientSend("join",{"roomId":curRoomID}, function(data) {
+            console.log("join room @@@@@@@");
+            console.log(data);
+            pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : curRoomID}, function(data) {
+                console.log(data);
+            });
+        });
+    },
+
+    initWXShare:function(){
+        var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
+        // curShareURL = "http://update.5d8d.com/111?state=STATE&refresh=1"
+        var urlStateString = "0";
+        
+        curShareURL = curShareURL.replace("STATE", urlStateString);
+        console.log("curShareURL===============");
+        console.log(curShareURL);
+                wx.onMenuShareAppMessage({
+                    title: confige.shareTitle,
+                    desc: confige.shareDes,
+                    link: curShareURL,
+                    imgUrl: "",
+                    trigger: function(res) {},
+                    success: function(res) {},
+                    cancel: function(res) {},
+                    fail: function(res) {}
+                });
+                console.log("H5分享到朋友圈2222222");
+                wx.onMenuShareTimeline({
+                    title: confige.shareTitle,
+                    desc: confige.shareDes,
+                    link: curShareURL,
+                    imgUrl: confige.h5ShareIco,
+                    trigger: function(res) {},
+                    success: function(res) {},
+                    cancel: function(res) {},
+                    fail: function(res) {}
+                });
     },
 });

@@ -28,23 +28,8 @@ var cfg = function(){
                     confige.roomId = data.roomId;
                     confige.gameSceneLoadOver = false;
                     confige.gameSceneLoadData = [];
-                    if(confige.curSceneIndex == 1)
-                        confige.curGameScene.loadingLayer.showLoading();
 
-                    cc.loader.onProgress = function(completedCount, totalCount, item) {
-                        var progress = (completedCount / totalCount).toFixed(2);
-                        var numString = "" + completedCount + "/" + totalCount;
-                        if(totalCount > 10){
-                            confige.loadNode.showNode();
-                            confige.loadNode.setProgress(progress,numString);
-                        }
-                    };
-                    if(data.roomType == "sanKung")
-                        cc.director.loadScene('SanKung');
-                    else if(data.roomType == "zhajinhua")
-                        cc.director.loadScene('JinHua');
-                    else
-                        cc.director.loadScene('NewGame');
+                    cc.director.loadScene('gameScene');
                     confige.curReconnectType = confige.ON_GAME;
                     break;
                 case "userInfo" :
@@ -78,12 +63,7 @@ var cfg = function(){
                                 confige.gameSceneLoadOver = false;
                                 confige.gameSceneLoadData = [];
                                 
-                                if(confige.roomData.roomType == "sanKung")
-                                    cc.director.loadScene('SanKung');
-                                else if(confige.roomData.roomType == "zhajinhua")
-                                    cc.director.loadScene('JinHua');
-                                else
-                                    cc.director.loadScene('NewGame');
+                                cc.director.loadScene('gameScene');
                                 confige.curReconnectType = confige.ON_GAME;
                             }else if(confige.curReconnectType == confige.ON_GAME){
                                 //已经在游戏场景内,直接恢复数据
@@ -91,14 +71,25 @@ var cfg = function(){
                                 pomelo.clientScene.gameInfoNode.btnClickRefresh();
                             }
                         }else{                      //没有则直接进入大厅界面
-                            if(confige.curReconnectType != confige.ON_OVER)     //当处于结算界面时,不自动跳回大厅界面;
+                            if(parseInt(confige.h5SceneID) == 0)
+                                cc.director.loadScene('hallScene');
+                            else if(parseInt(confige.h5SceneID) == 1)
+                                cc.director.loadScene('userScene');
+                            else if(parseInt(confige.h5SceneID) == 2)
                             {
-                                if(confige.enterSceneIndex == 0)
-                                    cc.director.loadScene('hallScene');
-                                else if(confige.enterSceneIndex == 1)
-                                    cc.director.loadScene('userScene'); 
-                                confige.resetGameData();
+                                pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
+                                    console.log("join room @@@@@@@");
+                                    console.log(confige.h5RoomID);
+                                });
                             }
+                            // if(confige.curReconnectType != confige.ON_OVER)     //当处于结算界面时,不自动跳回大厅界面;
+                            // {
+                            //     if(confige.enterSceneIndex == 0)
+                            //         cc.director.loadScene('hallScene');
+                            //     else if(confige.enterSceneIndex == 1)
+                            //         cc.director.loadScene('userScene'); 
+                            //     confige.resetGameData();
+                            // }
                         }
                     };
 
@@ -337,8 +328,8 @@ var cfg = function(){
                     break;
                 case "updateDiamond":
                     confige.curDiamond = data.data;
-                    if(confige.curSceneIndex == 1)
-                        pomelo.clientScene.updateDiamond();
+                    // if(confige.curSceneIndex == 1)
+                    //     pomelo.clientScene.updateDiamond();
                     break;
                 case "updateHistory":
                     confige.curHistory = data.data;
@@ -376,6 +367,12 @@ var cfg = function(){
                         confige.gameSceneLoadData.push(data);
                     else
                         pomelo.clientScene.compareBet(data.bet,confige.getCurChair(data.chair));
+                    break;
+                case "endRob":
+                    if(confige.gameSceneLoadOver == false)
+                        confige.gameSceneLoadData.push(data);
+                    else
+                        pomelo.clientScene.endRob(data);
                     break;
             }
         };
@@ -426,12 +423,12 @@ var cfg = function(){
                         if(code == "join")
                         {
                             console.log("join room ???")
-                            if(data.msg && data.msg.code)
-                            {
-                                pomelo.clientScene.showTips(tipsConf[data.msg.code], 2);
-                            }else{
-                                pomelo.clientScene.showTips("加入房间失败,请重新输入!", 2);
-                            }
+                            // if(data.msg && data.msg.code)
+                            // {
+                            //     pomelo.clientScene.showTips(tipsConf[data.msg.code], 2);
+                            // }else{
+                            //     pomelo.clientScene.showTips("加入房间失败,请重新输入!", 2);
+                            // }
                         }
                     }else{
                         console.log("do clientSend cbTrue!!!!!!");
@@ -460,19 +457,19 @@ var cfg = function(){
                             {
                                 if(cbFalse)
                                     cbFalse();
-                                if(data.msg && data.msg.code)
-                                {
-                                    pomelo.clientScene.showTips(tipsConf[data.msg.code]);
-                                }else{
-                                    pomelo.clientScene.showTips("创建房间失败,请重新创建!");
-                                }
+                                // if(data.msg && data.msg.code)
+                                // {
+                                //     pomelo.clientScene.showTips(tipsConf[data.msg.code]);
+                                // }else{
+                                //     pomelo.clientScene.showTips("创建房间失败,请重新创建!");
+                                // }
                             }else{
                                 console.log("data.flag == true");
                                 if(cbTrue)
                                     cbTrue();
-                                if(createType == "newRoom")
-                                    if(data.msg && data.msg.roomId)
-                                        pomelo.clientScene.showTips("创建房间成功!\n房间号为:" + data.msg.roomId, 1);
+                                // if(createType == "newRoom")
+                                //     if(data.msg && data.msg.roomId)
+                                //         pomelo.clientScene.showTips("创建房间成功!\n房间号为:" + data.msg.roomId, 1);
                             }
                         }
                     );
@@ -485,19 +482,19 @@ var cfg = function(){
                             {
                                 if(cbFalse)
                                     cbFalse();
-                                if(data.msg && data.msg.code)
-                                {
-                                    pomelo.clientScene.showTips(tipsConf[data.msg.code]);
-                                }else{
-                                    pomelo.clientScene.showTips("创建房间失败,请重新创建!");
-                                }
+                                // if(data.msg && data.msg.code)
+                                // {
+                                //     pomelo.clientScene.showTips(tipsConf[data.msg.code]);
+                                // }else{
+                                //     pomelo.clientScene.showTips("创建房间失败,请重新创建!");
+                                // }
                             }else{
                                 console.log("data.flag == true");
                                 if(cbTrue)
                                     cbTrue();
-                                if(createType == "newRoom")
-                                    if(data.msg && data.msg.roomId)
-                                        pomelo.clientScene.showTips("创建房间成功!\n房间号为:" + data.msg.roomId, 1);
+                                // if(createType == "newRoom")
+                                //     if(data.msg && data.msg.roomId)
+                                //         pomelo.clientScene.showTips("创建房间成功!\n房间号为:" + data.msg.roomId, 1);
                             }
                         }
                     );
@@ -550,8 +547,8 @@ var cfg = function(){
                 }
             );           
         };
-        // confige.host = "update.5d8d.com";    //测试外网
-        confige.host = "192.168.1.65";          //内网
+        confige.host = "update.5d8d.com";    //测试外网
+        // confige.host = "192.168.1.65";          //内网
         pomelo.clientLogin = function(uid,clientLogintoken) {
             console.log("pomelo try to login!!!!!!");
             var route = 'gate.gateHandler.queryEntry';
