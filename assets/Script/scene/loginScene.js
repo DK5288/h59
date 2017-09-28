@@ -41,8 +41,10 @@ cc.Class({
         }
 
 
-        if(cc.sys.platform == cc.sys.DESKTOP_BROWSER)
+        if(cc.sys.platform == cc.sys.DESKTOP_BROWSER){
+            this.node.getChildByName("uid").active = true;
             this.node.getChildByName("New Button").active = true;
+        }
         // "http://update.5d8d.com/111?state=STATE&refresh=1"
         // "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
     },

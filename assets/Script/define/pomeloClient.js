@@ -165,24 +165,9 @@ var cfg = function(){
                     }
                     break;
                 case "gameOver":
-                    confige.curReconnectType = confige.ON_OVER;
-                    if(pomelo.clientScene.gameBegin == true)
-                    {
-                        pomelo.clientScene.gameInfoNode.showOverLayer(data);
-                    }else{
-                        cc.director.loadScene('hallScene');
-                        if(confige.curGameScene.yuyinTimeOut != -1)
-                        {
-                            clearTimeout(confige.curGameScene.gameInfoNode.yuyinTimeOut);
-                        }
-                        confige.curGameScene.destroy();
-                        confige.resetGameData();
-                        if(confige.curUsePlatform == 1 || confige.curUsePlatform == 2)
-                        {
-                            confige.GVoiceCall.quitRoom(confige.GVoiceRoomID);
-                            confige.GVoiceCall.closeListen();
-                        }
-                    }
+                    confige.overData = data;
+                    console.log(confige.overData);
+                    cc.director.loadScene('overScene');
                     break;
                 case "beginRob":
                     if(confige.gameSceneLoadOver == false)
@@ -431,6 +416,12 @@ var cfg = function(){
                             // }
                         }
                     }else{
+                        if(data.msg && data.msg.code == "history")
+                        {
+                            confige.overData = data.msg.history;
+                            console.log(confige.overData);
+                            cc.director.loadScene('overScene');
+                        }
                         console.log("do clientSend cbTrue!!!!!!");
                         if(cbTrue)
                             cbTrue();

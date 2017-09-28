@@ -119,6 +119,8 @@ cc.Class({
             curString = this.quickStringList[msg.index];
             if(confige.soundEnable == true)
             {
+                console.log("someone say quick!!!!")
+                console.log("quick name === ",("chat_"+msg.index));
                 confige.playSoundByName("chat_"+msg.index);
                 // if(msg.sex == 2)
                 // {
@@ -195,7 +197,8 @@ cc.Class({
 
     h5ShareInit:function(){
         cc.log("邀请好友");
-        var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
+        // var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
+        var curShareURL = "http://pay.5d8d.com/NN/goldH5?state=STATE";
         var urlStateString = "2R"+confige.roomData.roomId;
         curShareURL = curShareURL.replace("STATE", urlStateString);
         console.log("curShareURL===============");
@@ -204,7 +207,7 @@ cc.Class({
                     title: confige.shareTitle,
                     desc: confige.shareDes,
                     link: curShareURL,
-                    imgUrl: "",
+                    imgUrl: confige.h5ShareIco,
                     trigger: function(res) {},
                     success: function(res) {},
                     cancel: function(res) {},

@@ -1337,6 +1337,7 @@ cc.Class({
                     return  function (err, audio) {
                         var curIndex = "chat_" + index;
                         confige.audioList[curIndex] = audio;
+                        console.log("curIndex===",curIndex);
                     }
                 }(i));
             }
@@ -1346,6 +1347,7 @@ cc.Class({
                     return  function (err, audio) {
                         var curIndex = "chat_" + index;
                         confige.audioList[curIndex] = audio;
+                        console.log("curIndex===",curIndex);
                     }
                 }(i));
             }

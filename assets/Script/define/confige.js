@@ -79,6 +79,7 @@ var cfg = {
   gameSceneLoadOver : false,
   gameSceneLoadData : [],
   hallSceneLoadData : [],
+  overData : null,
 
   playerLimits : -1,
   curUseId : -1,
@@ -127,20 +128,20 @@ cfg.resetGameData = function(){
 cfg.h5InviteCode = "0";
 cfg.h5SceneID = "0";
 cfg.h5RoomID = "0";
-cfg.h5SignID = "wxc36a5e9d4a56e1c2";
+cfg.h5SignID = "wxd72486a200bde1db";
 cfg.h5SignTime = "";
 cfg.h5SignTicket = "";
 cfg.h5SignSignature = "";
 cfg.h5SignStr = "niuniuH5";
 cfg.h5SignURL = "";
-cfg.h5LoginUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
-cfg.h5ShareUrlNew = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
-cfg.h5ShareIco = "";
+cfg.h5LoginUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd72486a200bde1db&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
+cfg.h5ShareUrlNew = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd72486a200bde1db&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
+cfg.h5ShareIco = "http://update.5d8d.com/111/MP_ICO.png";
 console.log("分享路径22222===="+cfg.h5ShareUrlNew);
 console.log("完整路径222===="+cfg.h5SignURL + cfg.h5ShareIco);
 //
 cfg.loginType = 0;   //0:游客登陆;1:微信登陆;2:h5微信登录
-cfg.h5ShareUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
+cfg.h5ShareUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd72486a200bde1db&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
 // cfg.code_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxf0e81c3bee622d60&redirect_uri=http%3A%2F%2Fnba.bluewebgame.com%2Foauth_response.php&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect ";
 cfg.access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
 cfg.refresh_token_url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=APPID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN";
@@ -163,8 +164,10 @@ cfg.shareTitle = "新大番薯测试";
 cfg.shareDes = "快来玩吧";
 //
 cfg.playSoundByName = function(curName){
-  if(cfg.audioList[curName])
+  if(cfg.audioList[curName]){
+    console.log("playSoundByName   1111111");
     cc.audioEngine.play(cfg.audioList[curName],false,cfg.audioVolume);
+  }
 };
 
 cfg.getWXHearFrame = function(headUrl,index,cb) {

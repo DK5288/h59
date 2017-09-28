@@ -17,6 +17,11 @@ cc.Class({
 
         if(cc.sys.platform == cc.sys.MOBILE_BROWSER)
             this.initWXShare();
+        if(cc.sys.platform == cc.sys.DESKTOP_BROWSER)
+        {
+            this.node.getChildByName("New Button").active = true;
+            this.node.getChildByName("roomNum").active = true;
+        }
     },
 
     // called every frame
@@ -157,9 +162,8 @@ cc.Class({
                 var curRoomID = data.msg.roomId;
                 if(data.flag == true)
                 {
-                    pomelo.clientSend("join",{"roomId":curRoomID}, function(data) {
+                    pomelo.clientSend("join",{"roomId":curRoomID}, function() {
                         console.log("join room @@@@@@@");
-                        console.log(data);
 
                         pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : curRoomID}, function(data) {
                             console.log(data);
@@ -210,7 +214,8 @@ cc.Class({
     },
 
     initWXShare:function(){
-        var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
+        // var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
+        var curShareURL = "http://pay.5d8d.com/NN/goldH5?stats=STATE";
         // curShareURL = "http://update.5d8d.com/111?state=STATE&refresh=1"
         var urlStateString = "0";
         
@@ -221,7 +226,7 @@ cc.Class({
                     title: confige.shareTitle,
                     desc: confige.shareDes,
                     link: curShareURL,
-                    imgUrl: "",
+                    imgUrl: confige.h5ShareIco,
                     trigger: function(res) {},
                     success: function(res) {},
                     cancel: function(res) {},

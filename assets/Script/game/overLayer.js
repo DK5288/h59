@@ -13,28 +13,65 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-
-    },
-
-    onInit:function(){
-        var colorWin = new cc.Color(221,183,82);
-        var colorLose = new cc.Color(231,220,191);
+        this.colorWin = new cc.Color(221,183,82);
+        this.colorLose = new cc.Color(231,220,191);
         this.roomid = this.node.getChildByName("roomid").getComponent("cc.Label");
         this.time = this.node.getChildByName("time").getComponent("cc.Label");
         this.roomround = this.node.getChildByName("roomround").getComponent("cc.Label");
 
+        this.overContent = this.node.getChildByName("scrollView").getChildByName("view").getChildByName("content");
+
         this.beginY = -80;
         this.offsetY = -150;
-        this.isInit = true;
+        console.log("show over 111111")
+        if(confige.overData != null){
+            console.log("show over 2222222")
+            this.onInitWithData(confige.overData.player);
+
+            var sortNum = confige.overData.roomId.toString();
+            sortNum = sortNum.substring(sortNum.length-6,sortNum.length)
+            this.roomid.string = "房间号:"+sortNum;
+            var curDate = new Date(confige.overData.endTime)
+            var Time1 = curDate.getFullYear()+"-"+(parseInt(curDate.getMonth())+1)+"-"+curDate.getDate();
+            var Time2 = curDate.getHours()+":"+curDate.getMinutes()+":"+curDate.getSeconds();
+            this.time.string = "" + Time1 + "   " + Time2;
+            this.roomround.string = ""+confige.overData.maxGameNumber+"局";
+        }
     },
 
-    showLayer:function(){
-        if(this.isInit == false)
-            this.onInit();
-        this.node.active = true;
-    },
-
-    hideLayer:function(){
-        this.node.active = false;
+    onInitWithData:function(overData){
+        console.log("onInitWithData@@@@@@@@@@@@@@");
+        var itemList = {};
+        var newOverItemCount = 0;
+        var maxScore = 0;
+        var maxIndex = 0;
+        for(var i in overData)
+        {
+            var newPlayerData = overData[i];
+            if(newPlayerData.isActive == true)
+            {
+                newOverItemCount ++;
+                var newOverItem = cc.instantiate(this.oriItem);
+                itemList[i] = newOverItem;
+                this.overContent.addChild(newOverItem);
+                newOverItem.y = this.beginY + this.offsetY * i;
+                if(newPlayerData.score > maxScore)
+                {
+                    maxScore = newPlayerData.score;
+                    maxIndex = i;
+                }
+                if(newPlayerData.score >= 0)
+                {
+                    newOverItem.getChildByName("score").color = this.colorWin;
+                    newOverItem.getChildByName("score").getComponent("cc.Label").string = "+"+newPlayerData.score;
+                }else{
+                    newOverItem.getChildByName("score").color = this.colorLose;
+                    newOverItem.getChildByName("score").getComponent("cc.Label").string = newPlayerData.score;
+                }
+                newOverItem.getChildByName("nick").getComponent("cc.Label").string = newPlayerData.playerInfo.nickname;
+            }
+        }
+        itemList[maxIndex].getChildByName("overWinIco").active = true;
+        this.overContent.height = 300 + newOverItemCount * 150;
     },
 });
