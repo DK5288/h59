@@ -40,10 +40,10 @@ var cfg = function(){
                     confige.curHistory = confige.userInfo.history;
                     confige.curSex = parseInt(confige.userInfo.sex);
                     console.log("confige.curSex==="+ confige.curSex);
-                    if(confige.loginType == 0)
-                    {
+                    // if(confige.loginType == 0)
+                    // {
                         confige.curUseId = data.data.uid;
-                    }
+                    // }
 
                     var newCallBack = function(){
                         if(confige.curReconnectType == confige.ON_LOGIN)
@@ -71,6 +71,7 @@ var cfg = function(){
                                 pomelo.clientScene.gameInfoNode.btnClickRefresh();
                             }
                         }else{                      //没有则直接进入大厅界面
+                            console.log("join room @@@@@@@",confige.h5SceneID);
                             if(parseInt(confige.h5SceneID) == 0)
                                 cc.director.loadScene('hallScene');
                             else if(parseInt(confige.h5SceneID) == 1)
@@ -81,7 +82,8 @@ var cfg = function(){
                                     console.log("join room @@@@@@@");
                                     console.log(confige.h5RoomID);
                                 });
-                            }
+                            }else if(parseInt(confige.h5SceneID) == 3)
+                                cc.director.loadScene('giftScene');
                             // if(confige.curReconnectType != confige.ON_OVER)     //当处于结算界面时,不自动跳回大厅界面;
                             // {
                             //     if(confige.enterSceneIndex == 0)
@@ -545,7 +547,7 @@ var cfg = function(){
             var route = 'gate.gateHandler.queryEntry';
             pomelo.init({
               host: confige.host,
-              port: "3900",
+              port: "4900",
               log: true
             }, function() {
                 

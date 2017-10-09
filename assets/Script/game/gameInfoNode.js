@@ -75,7 +75,7 @@ cc.Class({
         this.quickStringList[10] = "谢谢老板";
 
         if(cc.sys.platform == cc.sys.MOBILE_BROWSER)
-        this.h5ShareInit();
+            this.h5ShareInit();
     },
     
     onBtnReturnClicked:function(){
@@ -197,14 +197,20 @@ cc.Class({
 
     h5ShareInit:function(){
         cc.log("邀请好友");
-        // var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
-        var curShareURL = "http://pay.5d8d.com/NN/goldH5?state=STATE";
+        var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
+        // var curShareURL = "http://pay.5d8d.com/NN/goldH5?state=STATE";
         var urlStateString = "2R"+confige.roomData.roomId;
+        var curTitle = "";
+        var curDes = "快加进来玩";
+        if(confige.playerMax == 6)
+            curTitle = "熟人牛牛六人房";
+        else
+            curTitle = "熟人牛牛九人房";
         curShareURL = curShareURL.replace("STATE", urlStateString);
         console.log("curShareURL===============");
         console.log(curShareURL);
                 wx.onMenuShareAppMessage({
-                    title: confige.shareTitle,
+                    title: curTitle,
                     desc: confige.shareDes,
                     link: curShareURL,
                     imgUrl: confige.h5ShareIco,
@@ -215,7 +221,7 @@ cc.Class({
                 });
                 console.log("H5分享到朋友圈2222222");
                 wx.onMenuShareTimeline({
-                    title: confige.shareTitle,
+                    title: curTitle,
                     desc: confige.shareDes,
                     link: curShareURL,
                     imgUrl: confige.h5ShareIco,

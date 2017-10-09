@@ -214,8 +214,7 @@ cc.Class({
     },
 
     initWXShare:function(){
-        // var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
-        var curShareURL = "http://pay.5d8d.com/NN/goldH5?stats=STATE";
+        var curShareURL = "http://nnapi.5d8d.com/111?state=STATE";
         // curShareURL = "http://update.5d8d.com/111?state=STATE&refresh=1"
         var urlStateString = "0";
         
