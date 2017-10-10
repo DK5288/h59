@@ -127,7 +127,9 @@ cfg.resetGameData = function(){
 //h5
 cfg.h5InviteCode = "0";
 cfg.h5SceneID = "0";
+cfg.h5GiftSceneType = 0;
 cfg.h5RoomID = "0";
+cfg.h5CardID = "0";
 cfg.h5SignID = "wxc0f7af4749ce7176";
 cfg.h5SignTime = "";
 cfg.h5SignTicket = "";

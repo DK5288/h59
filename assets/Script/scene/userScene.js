@@ -136,7 +136,9 @@ cc.Class({
         }
     },
 
-
+    btnSendClick:function(){
+        cc.director.loadScene('giftScene');
+    },
      // //获取验证码
      //  var getCaptcha = function(phone) {
      //      pomelo.request("connector.entryHandler.getCaptcha", {"phone" : phone}, function(data) {

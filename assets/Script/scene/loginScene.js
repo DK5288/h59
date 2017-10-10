@@ -32,8 +32,11 @@ cc.Class({
         {
             if(RequestData.state && RequestData.state != "STATE")
             {
-                confige.h5SceneID = RequestData.state.substring(0,1) 
-                confige.h5RoomID = RequestData.state.substring(2,RequestData.state.length)
+                confige.h5SceneID = RequestData.state.substring(0,1);
+                if(confige.h5SceneID == 2)
+                    confige.h5RoomID = RequestData.state.substring(2,RequestData.state.length);
+                if(confige.h5SceneID == 4)
+                    confige.h5CardID = parseInt(RequestData.state.substring(2,RequestData.state.length));
             }
 
             confige.curUseCode = RequestData.code;
@@ -41,6 +44,26 @@ cc.Class({
             pomelo.clientLogin(-1,-1);
         }
 
+            var userSetting = JSON.parse(cc.sys.localStorage.getItem('userSetting'));
+            if(userSetting == null)
+            {
+                var newUserSetting = {
+                    musicEnable : true,
+                    soundEnable : true
+                };
+                cc.sys.localStorage.setItem('userSetting', JSON.stringify(newUserSetting));
+                userSetting = JSON.parse(cc.sys.localStorage.getItem('userSetting'));
+            }
+            console.log(userSetting);
+            if(userSetting.musicEnable == true)
+                confige.musicEnable = true;
+            else if(userSetting.musicEnable == false)
+                confige.musicEnable = false;
+
+            if(userSetting.soundEnable == true)
+                confige.soundEnable = true;
+            else if(userSetting.soundEnable == false)
+                confige.soundEnable = false;
 
         if(cc.sys.platform == cc.sys.DESKTOP_BROWSER){
             this.node.getChildByName("uid").active = true;
@@ -66,7 +89,14 @@ cc.Class({
         if(curUid == "")
             curUid = null;
         
-        confige.h5SceneID = 0;
+        confige.h5SceneID = 1;
+        if(confige.h5SceneID == 3)
+            confige.h5GiftSceneType = 0;
+        else if(confige.h5SceneID == 4)
+            confige.h5GiftSceneType = 1;
+        else if(confige.h5SceneID == 5)
+            confige.h5GiftSceneType = 2;
+
         pomelo.clientLogin(curUid,"1111212");
     },
 
@@ -86,4 +116,34 @@ cc.Class({
         }   
         return theRequest;
     },
+
+     // //生成红包
+     //  var createRedPacket = function(diamond) {
+     //      pomelo.request("connector.redPacket.createRedPacket", {"diamond" : diamond}, function(data) {
+     //          console.log(data)
+     //        }
+     //      )
+     //  }
+     //  //查询红包
+     //  var queryRedPacket = function(redId) {
+     //      pomelo.request("connector.redPacket.queryRedPacket", {"redId" : redId}, function(data) {
+     //          console.log(data)
+     //        }
+     //      )
+     //  }      
+     //  //领取红包
+     //  var drawRedPacket = function(redId) {
+     //      pomelo.request("connector.redPacket.drawRedPacket", {"redId" : redId}, function(data) {
+     //          console.log(data)
+     //        }
+     //      )
+     //  }       
+     //  //查询个人红包记录
+     //  var queryUserRed = function(redId) {
+     //      pomelo.request("connector.redPacket.queryUserRed", {}, function(data) {
+     //          console.log(data)
+     //        }
+     //      )
+     //  }150756170230252930
+     // http://nnapi.5d8d.com/111?state=1
 });

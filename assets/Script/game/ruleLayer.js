@@ -24,7 +24,7 @@ cc.Class({
 
         if(confige.roomData.awardType == 0)
             this.tips3.string = "牛牛x3牛九x2牛八x2";
-        else if(confige.roomData.awardType == 0)
+        else if(confige.roomData.awardType == 1)
             this.tips3.string = "牛牛x4牛九x3牛八x2牛七x2";
         if(confige.roomData.maxGameNumber == 10 || confige.roomData.maxGameNumber == 12)
         {

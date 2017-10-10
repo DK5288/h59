@@ -72,17 +72,18 @@ var cfg = function(){
                             }
                         }else{                      //没有则直接进入大厅界面
                             console.log("join room @@@@@@@",confige.h5SceneID);
-                            if(parseInt(confige.h5SceneID) == 0)
+                            var curSceneID = parseInt(confige.h5SceneID);
+                            if(curSceneID == 0)
                                 cc.director.loadScene('hallScene');
-                            else if(parseInt(confige.h5SceneID) == 1)
+                            else if(curSceneID == 1)
                                 cc.director.loadScene('userScene');
-                            else if(parseInt(confige.h5SceneID) == 2)
+                            else if(curSceneID == 2)
                             {
                                 pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
                                     console.log("join room @@@@@@@");
                                     console.log(confige.h5RoomID);
                                 });
-                            }else if(parseInt(confige.h5SceneID) == 3)
+                            }else if(curSceneID == 3 || curSceneID == 4 || curSceneID == 5)
                                 cc.director.loadScene('giftScene');
                             // if(confige.curReconnectType != confige.ON_OVER)     //当处于结算界面时,不自动跳回大厅界面;
                             // {

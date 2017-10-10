@@ -61,11 +61,13 @@ cc.Class({
                 this.toggleSound.isChecked = false;
                 this.toggleSoundLabel.string = "关闭";
                 confige.soundEnable = false;
+                console.log("soundEnable=====false")
             }
             else{
                 this.toggleSound.isChecked = true;
                 this.toggleSoundLabel.string = "开启";
                 confige.soundEnable = true;
+                console.log("soundEnable=====true")
             }
         }
         this.saveSetting();

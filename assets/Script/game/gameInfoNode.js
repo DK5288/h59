@@ -74,7 +74,7 @@ cc.Class({
         this.quickStringList[9] = "我给你们送温暖了";
         this.quickStringList[10] = "谢谢老板";
 
-        if(cc.sys.platform == cc.sys.MOBILE_BROWSER)
+        // if(cc.sys.platform == cc.sys.MOBILE_BROWSER)
             this.h5ShareInit();
     },
     
@@ -201,17 +201,36 @@ cc.Class({
         // var curShareURL = "http://pay.5d8d.com/NN/goldH5?state=STATE";
         var urlStateString = "2R"+confige.roomData.roomId;
         var curTitle = "";
-        var curDes = "快加进来玩";
+
+        var curDes = "模式：明牌抢庄 ";
+        curDes = curDes + "底分：" + confige.roomData.basic + "分 ";
+        if(confige.roomData.awardType == 0)
+            curDes = curDes + "规则：牛牛x3牛九x2牛八x2 ";
+        else if(confige.roomData.awardType == 1)
+            curDes = curDes + "规则：牛牛x4牛九x3牛八x2牛七x2 ";
+        if(confige.roomData.maxGameNumber == 10 || confige.roomData.maxGameNumber == 12)
+        {
+            curDes = curDes + "局数：" + confige.roomData.maxGameNumber + "局X1房卡";
+        }
+        if(confige.roomData.maxGameNumber == 20 || confige.roomData.maxGameNumber == 24)
+        {
+            curDes = curDes + "局数：" + confige.roomData.maxGameNumber + "局X2房卡";
+        }
+        console.log("curDes ====== ");
+        console.log(curDes);
+
+        var roomIdStr = confige.roomData.roomId.toString();
+        roomIdStr = roomIdStr.substring(roomIdStr.length-6,roomIdStr.length);
         if(confige.playerMax == 6)
-            curTitle = "熟人牛牛六人房";
+            curTitle = "熟人六人牛牛(房间号:" + roomIdStr + ")";
         else
-            curTitle = "熟人牛牛九人房";
+            curTitle = "熟人九人牛牛(房间号:" + roomIdStr + ")";
         curShareURL = curShareURL.replace("STATE", urlStateString);
         console.log("curShareURL===============");
         console.log(curShareURL);
                 wx.onMenuShareAppMessage({
                     title: curTitle,
-                    desc: confige.shareDes,
+                    desc: curDes,
                     link: curShareURL,
                     imgUrl: confige.h5ShareIco,
                     trigger: function(res) {},
@@ -222,7 +241,7 @@ cc.Class({
                 console.log("H5分享到朋友圈2222222");
                 wx.onMenuShareTimeline({
                     title: curTitle,
-                    desc: confige.shareDes,
+                    desc: curDes,
                     link: curShareURL,
                     imgUrl: confige.h5ShareIco,
                     trigger: function(res) {},

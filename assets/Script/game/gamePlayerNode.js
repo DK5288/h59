@@ -54,7 +54,7 @@ cc.Class({
         this.noRobImgList = {};
         this.lightBgList = {};
 
-        // this.leaveNodeList = {};
+        this.leaveNodeList = {};
         this.robNumNodeList = {};
         this.robNumLabelList = {};
         
@@ -69,7 +69,7 @@ cc.Class({
             this.noRobImgList[i] = this.playerList[i].getChildByName("noRobImg");
             this.lightBgList[i] = this.playerList[i].getChildByName("lightBg");
 
-            // this.leaveNodeList[i] = this.playerList[i].getChildByName("leaveNode");
+            this.leaveNodeList[i] = this.playerList[i].getChildByName("leaveImg");
             this.robNumNodeList[i] = this.playerList[i].getChildByName("robNum");
             this.robNumLabelList[i] = this.robNumNodeList[i].getComponent("cc.Label");
             this.scoreAddNodeList[i] = this.playerList[i].getChildByName("scoreAdd");
@@ -144,8 +144,8 @@ cc.Class({
                     {
                         this.addOnePlayer(newPlayerInfo);
                         this.playerCount ++;
-                        // if(newPlayerInfo.isOnline == false)
-                        //     this.leaveNodeList[confige.getCurChair(k)].active = true;
+                        if(newPlayerInfo.isOnline == false)
+                            this.leaveNodeList[confige.getCurChair(k)].active = true;
                     }
                 }
             }
@@ -566,4 +566,9 @@ cc.Class({
             self.showScoreAni(toChair,oriNum);
         }, 0.15*num+0.7);
     },
+
+    btnShowCardClick:function(){
+        gameData.gameMainScene.btn_showMyCard();
+    },
+
 });

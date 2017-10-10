@@ -16,19 +16,31 @@ cc.Class({
     onLoad: function () {
         this.resNode = this.node.getChildByName("resNode");
 
+        this.initRoomInfo();
+
         var loadResType = 1;
+        var roomIdStr = confige.roomData.roomId.toString();
+        roomIdStr = roomIdStr.substring(roomIdStr.length-6,roomIdStr.length);
         if(confige.roomData.GAME_PLAYER == 6)
         {
             confige.playerMax = 6;
             loadResType = 1;
             this.node.getChildByName("gameBg1").active = true;
+            document.title = "熟人六人牛牛(房间号:" + roomIdStr + ")";
             // this.node.getChildByName("gameBg2").active = false;
         }else if(confige.roomData.GAME_PLAYER == 9){
             confige.playerMax = 9;
             loadResType = 2;
             // this.node.getChildByName("gameBg1").active = false;
             this.node.getChildByName("gameBg2").active = true;
+            document.title = "熟人九人牛牛(房间号:" + roomIdStr + ")";
         }
+
+        // pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : confige.h5RoomID}, function(data) {
+        //     console.log("confige.h5RoomID==="+confige.h5RoomID);
+        //     console.log("getRoomInfo@@@@@@@");
+        //     console.log(data);
+        // });
 
         this.dealGetRoomInfo();
         this.playerNode = this.node.getChildByName("playerNode");
@@ -75,10 +87,7 @@ cc.Class({
                 }
             }
         });
-        // this.gameInfoNode = this.node.getChildByName("gameInfoNode").getComponent("gameInfoNode");
-        // this.gameInfoNode.onInit();
-        // this.gamePlayerNode = this.node.getChildByName("gamePlayerNode").getComponent("gamePlayerNode");
-        // this.gamePlayerNode.onInit();
+
         console.log("gameScene Load!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     },
 
@@ -131,7 +140,7 @@ cc.Class({
 
         this.readyBtn = this.node.getChildByName("btnNode").getChildByName("btnReady");
         this.showCardBtn = this.node.getChildByName("btnNode").getChildByName("btnShowCard");
-        
+        this.showCardBtn2 = this.gamePlayerNode.node.getChildByName("btnShowCard");
         this.betNumMax = 20;
         this.niuniuBetType = 1;
 
@@ -451,6 +460,7 @@ cc.Class({
         if(chair == 0)      //当前玩家自己
         {
             this.showCardBtn.active = false;
+            this.showCardBtn2.active = false;
             this.joinLate = false;
 
             // this.showGameStatus(5);
@@ -621,6 +631,7 @@ cc.Class({
         {
             var callFunc2 = function(){
                 this.showCardBtn.active = true;
+                this.showCardBtn2.active = true;
             };
             this.scheduleOnce(callFunc2,0.5);
 
@@ -634,6 +645,7 @@ cc.Class({
     btn_showMyCard:function(){
         pomelo.clientSend("showCard");
         this.showCardBtn.active = false;
+        this.showCardBtn2.active = false;
 
         var handCard = this.gamePlayerNode.playerCardList[this.meChair];
         var curNiuType = 0;
@@ -686,6 +698,7 @@ cc.Class({
         console.log("onServerSettlement 33333333");
         this.waitForSettle = true;
         this.showCardBtn.active = false;
+        this.showCardBtn2.active = false;
         this.timerItem.hideTimer();
         
         var self = this;
@@ -745,6 +758,7 @@ cc.Class({
     resetScene:function(){
         this.readyBtn.active = true;
         this.showCardBtn.active = false;
+        this.showCardBtn2.active = false;
 
         this.timerItem.active = false;
     },
@@ -1368,4 +1382,27 @@ cc.Class({
             console.log(data);
         });
     },
+
+    initRoomInfo:function(){
+        this.roomInfoLayer = this.node.getChildByName("roomInfoLayer");
+        this.labelMode = this.roomInfoLayer.getChildByName("mode").getComponent("cc.Label");
+        this.labelBasic = this.roomInfoLayer.getChildByName("basic").getComponent("cc.Label");
+        this.labelRule = this.roomInfoLayer.getChildByName("rule").getComponent("cc.Label");
+        this.labelRound = this.roomInfoLayer.getChildByName("round").getComponent("cc.Label");
+        this.labelPlayer = this.roomInfoLayer.getChildByName("player").getComponent("cc.Label");
+        this.labelId = this.roomInfoLayer.getChildByName("id").getComponent("cc.Label");
+    },
+
+    showRoomInfo:function(infoData){
+
+    },
+
+    btnCreateClick:function(){
+
+    },
+
+    btnJoinClick:function(){
+
+    },
+
 });
