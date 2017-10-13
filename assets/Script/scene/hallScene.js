@@ -8,11 +8,6 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        pomelo.request("connector.redPacket.queryRedPacket", {"redId" : 150756170230252930}, function(data) {
-            console.log("loading scene queryRedPacket")
-            console.log(data)
-        });
-
         this.initUserInfo();
         this.initRoomInfoLayer();
 
@@ -27,6 +22,9 @@ cc.Class({
             this.node.getChildByName("New Button").active = true;
             this.node.getChildByName("roomNum").active = true;
         }
+        confige.joinState = false;
+
+        console.log(cc.director.getVisibleSize());
     },
 
     // called every frame
@@ -160,7 +158,10 @@ cc.Class({
     },
 
     btnCreateRoomOK:function(){
+        console.log("this.playerCount==="+this.playerCount);
         console.log("this.gameTime==="+this.gameTime);
+        console.log("this.basicScore==="+this.basicScore);
+        console.log("this.awardType==="+this.awardType);
         pomelo.request("connector.entryHandler.sendData", {"code" : "agency","params" : {
             playerCount:this.playerCount,gameNumber: this.gameTime, gameType: "mingpaiqz",basic: this.basicScore,halfwayEnter: true,isWait:false,
             awardType:this.awardType,wuhuaniu:this.wuhuaniu,zhadanniu:this.zhadanniu,wuxiaoniu:this.wuxiaoniu}}, function(data) {
@@ -169,6 +170,7 @@ cc.Class({
                 var curRoomID = data.msg.roomId;
                 if(data.flag == true)
                 {
+                    confige.joinState = true;
                     pomelo.clientSend("join",{"roomId":curRoomID}, function() {
                         console.log("join room @@@@@@@");
                         confige.h5RoomID = curRoomID;
@@ -176,6 +178,8 @@ cc.Class({
                         //     console.log(data);
                         // });
                     });
+                    // confige.h5RoomID = curRoomID;
+                    // cc.director.loadScene('gameScene');
                 }
                 
                 // if(data.flag == false)
@@ -208,13 +212,19 @@ cc.Class({
         // pomelo.request("connector.entryHandler.sendData",{"code" : "join","params" : {"roomId" : curRoomID}},function(data) {
         //     console.log(data)
         // });
-
-
-        pomelo.clientSend("join",{"roomId":curRoomID}, function(data) {
-            console.log("join room @@@@@@@");
+        pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : curRoomID}, function(data) {
             console.log(data);
-            confige.h5RoomID = curRoomID;
-            // pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : curRoomID}, function(data) {
+            if(data.roomId)
+            {
+                confige.h5RoomID = data.roomId;
+                cc.director.loadScene('gameScene');
+            }else{
+                console.log("data ===== {}");
+            }
+            
+
+            // pomelo.clientSend("join",{"roomId":confige.h5RoomID}, function(data) {
+            //     console.log("join room on hall @@@@@@@");
             //     console.log(data);
             // });
         });

@@ -15,9 +15,22 @@ cc.Class({
 
     onLoad: function () {
         this.resNode = this.node.getChildByName("resNode");
+        if(confige.joinState == true)
+            this.newJoinRoom();
+        else
+            this.initRoomInfo();
 
-        this.initRoomInfo();
+        pomelo.clientScene = this;
+        confige.curGameScene = this;
+        gameData.gameMainScene = this;
 
+        console.log(cc.director.getVisibleSize());
+        cc.view.setDesignResolutionSize(cc.director.getVisibleSize().width,cc.director.getVisibleSize().height,cc.ResolutionPolicy.EXACT_FIT);
+    },
+
+    newJoinRoom:function(){
+        if(confige.joinState == false)
+            this.roomInfoLayer.active = false;
         var loadResType = 1;
         var roomIdStr = confige.roomData.roomId.toString();
         roomIdStr = roomIdStr.substring(roomIdStr.length-6,roomIdStr.length);
@@ -36,13 +49,6 @@ cc.Class({
             document.title = "熟人九人牛牛(房间号:" + roomIdStr + ")";
         }
 
-        // pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : confige.h5RoomID}, function(data) {
-        //     console.log("confige.h5RoomID==="+confige.h5RoomID);
-        //     console.log("getRoomInfo@@@@@@@");
-        //     console.log(data);
-        // });
-
-        this.dealGetRoomInfo();
         this.playerNode = this.node.getChildByName("playerNode");
         this.infoNode = this.node.getChildByName("infoNode");
         this.playerLoadOK = false;
@@ -139,6 +145,7 @@ cc.Class({
         this.myBetNum = 0;
 
         this.readyBtn = this.node.getChildByName("btnNode").getChildByName("btnReady");
+        this.readyBtn.active = true;
         this.showCardBtn = this.node.getChildByName("btnNode").getChildByName("btnShowCard");
         this.showCardBtn2 = this.gamePlayerNode.node.getChildByName("btnShowCard");
         this.betNumMax = 20;
@@ -751,6 +758,12 @@ cc.Class({
             if(this.gameInfoNode.roomCurTime < this.gameInfoNode.roomMaxTime)
                     this.gameInfoNode.roomCurTime ++;
                 this.gameInfoNode.roomTime.string = this.gameInfoNode.roomCurTime + " / " + this.gameInfoNode.roomMaxTime + "局";
+
+            for(var i in confige.roomPlayer)
+            {
+                if(confige.roomPlayer[i].isActive == true)
+                    confige.roomPlayer[i].isReady = false;
+            }
         };
         this.scheduleOnce(showSettleFunc4,3.5);
     },
@@ -1375,14 +1388,6 @@ cc.Class({
         }
     },
 
-    dealGetRoomInfo:function(){
-        console.log("dealGetRoomInfo!!!!!");
-        pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : confige.roomData.roomId}, function(data) {
-            console.log("dealGetRoomInfo@@@@@");
-            console.log(data);
-        });
-    },
-
     initRoomInfo:function(){
         this.roomInfoLayer = this.node.getChildByName("roomInfoLayer");
         this.labelMode = this.roomInfoLayer.getChildByName("mode").getComponent("cc.Label");
@@ -1391,6 +1396,60 @@ cc.Class({
         this.labelRound = this.roomInfoLayer.getChildByName("round").getComponent("cc.Label");
         this.labelPlayer = this.roomInfoLayer.getChildByName("player").getComponent("cc.Label");
         this.labelId = this.roomInfoLayer.getChildByName("id").getComponent("cc.Label");
+
+        var self = this;
+        if(confige.h5RoomID != "0")
+        {
+            pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : confige.h5RoomID}, function(data) {
+                console.log("dealGetRoomInfo@@@@@"+confige.h5RoomID);
+                console.log(data);
+                self.roomInfoLayer.active = true;
+                self.labelBasic.string = "底分：" + data.basic+"分"
+                if(data.gameType == "mingpaiqz")
+                    self.labelMode.string ="模式：" + "明牌抢庄";
+                if(data.awardType == 0)
+                    self.labelRule.string = "规则：牛牛x3牛九x2牛八x2 ";
+                else if(data.awardType == 1)
+                    self.labelRule.string = "规则：牛牛x4牛九x3牛八x2牛七x2 ";
+                if(data.gameNumber == 10 || data.gameNumber == 12)
+                {
+                    self.labelRound.string = "局数：" + data.gameNumber + "局X1房卡";
+                }
+                if(data.gameNumber == 20 || data.gameNumber == 24)
+                {
+                    self.labelRound.string = "局数：" + data.gameNumber + "局X2房卡";
+                }
+                var roomIdStr = data.roomId.toString();
+                roomIdStr = roomIdStr.substring(roomIdStr.length-6,roomIdStr.length);
+                if(data.playerCount == 6)
+                {
+                    self.node.getChildByName("gameBg1").active = true;
+                    document.title = "熟人六人牛牛(房间号:" + roomIdStr + ")";
+                }else if(data.playerCount == 9){
+                    self.node.getChildByName("gameBg2").active = true;
+                    document.title = "熟人九人牛牛(房间号:" + roomIdStr + ")";
+                }
+
+                self.labelId.string = "你的大番薯ID:" + confige.curUseId;
+                var newStr = "房间中有";
+                if(data.playerInfo)
+                {
+                    for(var i in data.playerInfo)
+                        newStr = newStr + data.playerInfo[i].nickname + ",";
+                }
+                newStr = newStr + "是否加入?";
+                self.labelPlayer.string = newStr;
+
+                if(data.playerInfo.length == 0)
+                {
+                    self.roomInfoLayer.active = false;
+                    pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
+                        console.log("join room111111 @@@@@@@@");
+                        console.log(confige.h5RoomID);
+                    });
+                }
+            });
+        }
     },
 
     showRoomInfo:function(infoData){
@@ -1398,11 +1457,14 @@ cc.Class({
     },
 
     btnCreateClick:function(){
-
+        cc.director.loadScene('hallScene');
     },
 
     btnJoinClick:function(){
-
+        pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
+            console.log("join room111111 @@@@@@@@");
+            console.log(confige.h5RoomID);
+        });
     },
 
 });

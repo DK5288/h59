@@ -125,6 +125,7 @@ cfg.resetGameData = function(){
 },
 
 //h5
+cfg.joinState = false;
 cfg.h5InviteCode = "0";
 cfg.h5SceneID = "0";
 cfg.h5GiftSceneType = 0;
@@ -381,6 +382,18 @@ cfg.getDayCount = function(){
   var newDate = Date.parse(new Date());
   var curDayCount = parseInt(newDate/1000/86400);
   return curDayCount;
+};
+
+cfg.getDateDay = function(time){
+  var curDate = new Date(time);
+  var dayString = curDate.getFullYear()+"-"+(parseInt(curDate.getMonth())+1)+"-"+curDate.getDate();
+  return dayString;
+};
+
+cfg.getDateTime = function(time){
+  var curDate = new Date(time);
+  var timeString = curDate.getHours()+":"+curDate.getMinutes()+":"+curDate.getSeconds();
+  return timeString;
 };
 
 module.exports = cfg;

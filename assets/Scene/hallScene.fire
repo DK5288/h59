@@ -2815,7 +2815,9 @@
     },
     "_N$normalSprite": null,
     "_N$disabledSprite": null,
-    "_N$target": null
+    "_N$target": {
+      "__id__": 63
+    }
   },
   {
     "__type__": "cc.Node",

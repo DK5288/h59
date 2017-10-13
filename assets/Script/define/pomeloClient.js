@@ -28,9 +28,12 @@ var cfg = function(){
                     confige.roomId = data.roomId;
                     confige.gameSceneLoadOver = false;
                     confige.gameSceneLoadData = [];
-
-                    cc.director.loadScene('gameScene');
+                    if(confige.joinState == true)
+                        cc.director.loadScene('gameScene');
+                    else
+                        pomelo.clientScene.newJoinRoom();
                     confige.curReconnectType = confige.ON_GAME;
+
                     break;
                 case "userInfo" :
                     console.log(data);
@@ -79,10 +82,11 @@ var cfg = function(){
                                 cc.director.loadScene('userScene');
                             else if(curSceneID == 2)
                             {
-                                pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
-                                    console.log("join room @@@@@@@");
-                                    console.log(confige.h5RoomID);
-                                });
+                                cc.director.loadScene('gameScene');
+                                // pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
+                                //     console.log("join room @@@@@@@");
+                                //     console.log(confige.h5RoomID);
+                                // });
                             }else if(curSceneID == 3 || curSceneID == 4 || curSceneID == 5)
                                 cc.director.loadScene('giftScene');
                             // if(confige.curReconnectType != confige.ON_OVER)     //当处于结算界面时,不自动跳回大厅界面;

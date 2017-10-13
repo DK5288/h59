@@ -74,7 +74,7 @@ cc.Class({
         this.quickStringList[9] = "我给你们送温暖了";
         this.quickStringList[10] = "谢谢老板";
 
-        // if(cc.sys.platform == cc.sys.MOBILE_BROWSER)
+        if(cc.sys.platform == cc.sys.MOBILE_BROWSER)
             this.h5ShareInit();
     },
     

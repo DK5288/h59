@@ -89,7 +89,7 @@ cc.Class({
         if(curUid == "")
             curUid = null;
         
-        confige.h5SceneID = 1;
+        confige.h5SceneID = 0;
         if(confige.h5SceneID == 3)
             confige.h5GiftSceneType = 0;
         else if(confige.h5SceneID == 4)
@@ -145,5 +145,4 @@ cc.Class({
      //        }
      //      )
      //  }150756170230252930
-     // http://nnapi.5d8d.com/111?state=1
 });
