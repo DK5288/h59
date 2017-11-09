@@ -23,6 +23,7 @@ cc.Class({
         var self = this;
         if(confige.h5CardID != "0")
         {
+            self.sendLayer.active = false;
             pomelo.request("connector.redPacket.queryRedPacket", {"redId" : confige.h5CardID}, function(data) {
                 console.log(data);
                 self.curCardData = data;
@@ -31,7 +32,7 @@ cc.Class({
                     self.giftLayer.active = true;
                     self.sceneType = 1;
                 }else{
-                    self.giftHistory.active = false;
+                    self.giftHistory.active = true;
                     self.sceneType = 2;
                 }
                 self.updateUserInfo();

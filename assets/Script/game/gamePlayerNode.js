@@ -285,7 +285,7 @@ cc.Class({
         {
             var curNiuType = 0;
            
-             curNiuType = confige.getNiuType(handCard);
+            curNiuType = confige.getNiuType(handCard);
             this.showNiuType(curChair, curNiuType.type);
         }
     },
@@ -402,7 +402,7 @@ cc.Class({
         console.log(this.bankerRunList);
         console.log("this.bankerEndChair==="+endChair);
         console.log("this.bankerEndIndex==="+this.bankerEndIndex);
-        var moveStep = this.bankerRunList.length+parseInt(Math.random()*5)
+        var moveStep = this.bankerRunList.length+2+parseInt(Math.random()*3)
         this.bankerBeginIndex = (this.bankerEndIndex + this.bankerRunList.length - (moveStep%this.bankerRunList.length - 1))%this.bankerRunList.length;
         console.log("bankerBeginIndex === ",this.bankerBeginIndex);
         console.log("moveStep===@@@@",moveStep);
@@ -415,7 +415,7 @@ cc.Class({
             {
                 self.bankerBoxList[curAniChair].stopAllActions();
                 self.bankerBoxList[curAniChair].opacity = 0;
-                self.bankerBoxList[curAniChair].runAction(cc.sequence(cc.fadeIn(0.15),cc.fadeOut(0.15)));
+                self.bankerBoxList[curAniChair].runAction(cc.sequence(cc.fadeIn(0.2),cc.fadeOut(0.2)));
             }
             if(curStep > moveStep)
             {
@@ -424,10 +424,10 @@ cc.Class({
                 self.showBankerAfterAni();
                 self.resetBankerAni();
                 if(cb)
-                    cb(parseInt(0.2*moveStep));
+                    cb(parseInt(0.3*moveStep));
             }
         };
-        this.schedule(this.bankerAniSchedule,0.2);
+        this.schedule(this.bankerAniSchedule,0.3);
         this.bankerAniSchedule();
     },
 

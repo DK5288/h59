@@ -14,6 +14,11 @@ cc.Class({
         confige.loginType = 0;
         pomeloClient();
         // pomelo.clientLogin("","1111212");
+        
+        if (cc.sys.isNative) {
+            this.joinNative();
+            return;
+        }
 
         var RequestData = {};
         RequestData = this.GetRequest();
@@ -70,6 +75,8 @@ cc.Class({
             this.node.getChildByName("New Button").active = true;
             this.join();
         }
+
+        // cc.director.loadScene('gameScene6');
         // "http://update.5d8d.com/111?state=STATE&refresh=1"
         // "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc36a5e9d4a56e1c2&redirect_uri=http%3A%2F%2Fupdate.5d8d.com%2F111&response_type=code&scope=snsapi_userinfo&state=STATE";
     },
@@ -90,6 +97,23 @@ cc.Class({
             curUid = null;
         
         confige.h5SceneID = 0;
+        if(confige.h5SceneID == 3)
+            confige.h5GiftSceneType = 0;
+        else if(confige.h5SceneID == 4)
+            confige.h5GiftSceneType = 1;
+        else if(confige.h5SceneID == 5)
+            confige.h5GiftSceneType = 2;
+
+        pomelo.clientLogin(curUid,"1111212");
+    },
+
+    joinNative:function(){
+        var curUid = this.node.getChildByName("uid").getComponent("cc.EditBox").string;
+        console.log("curUid == "+curUid);
+        if(curUid == "")
+            curUid = null;
+        
+        confige.h5SceneID = 10;
         if(confige.h5SceneID == 3)
             confige.h5GiftSceneType = 0;
         else if(confige.h5SceneID == 4)

@@ -555,10 +555,11 @@ cc.Class({
     },
 
     getMD5:function (text) {
-        jsb.reflection.callStaticMethod("org/cocos2dx/javascript/JSCallJAVA", "JAVALog", "(Ljava/lang/String;)V", "md511111111");
-        var md5String = require('crypto').createHash('md5').update(text).digest('hex');
-        jsb.reflection.callStaticMethod("org/cocos2dx/javascript/JSCallJAVA", "JAVALog", "(Ljava/lang/String;)V", "md52222222");
-        return md5String;
+        return "3123";
+        // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/JSCallJAVA", "JAVALog", "(Ljava/lang/String;)V", "md511111111");
+        // var md5String = require('crypto').createHash('md5').update(text).digest('hex');
+        // jsb.reflection.callStaticMethod("org/cocos2dx/javascript/JSCallJAVA", "JAVALog", "(Ljava/lang/String;)V", "md52222222");
+        // return md5String;
     },
 
     createXMLHttpRequest:function() {  

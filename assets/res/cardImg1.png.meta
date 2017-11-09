@@ -1,14 +1,14 @@
 {
   "ver": "1.0.0",
-  "uuid": "16e1fe80-8235-4ac1-842b-cb4c526ba1e6",
+  "uuid": "92a09213-e820-4a61-8031-c80f250404c1",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
   "subMetas": {
-    "giftBg": {
+    "cardImg1": {
       "ver": "1.0.3",
-      "uuid": "ef36691c-91ec-44ef-b4ee-ecace2db79b5",
-      "rawTextureUuid": "16e1fe80-8235-4ac1-842b-cb4c526ba1e6",
+      "uuid": "013757f2-36e4-4dac-b06a-81941824b6bd",
+      "rawTextureUuid": "92a09213-e820-4a61-8031-c80f250404c1",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -16,10 +16,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 1080,
-      "height": 1921,
-      "rawWidth": 1080,
-      "rawHeight": 1921,
+      "width": 67,
+      "height": 89,
+      "rawWidth": 67,
+      "rawHeight": 89,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

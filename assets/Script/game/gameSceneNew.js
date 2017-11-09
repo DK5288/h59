@@ -14,6 +14,7 @@ cc.Class({
     },
 
     onLoad: function () {
+        // return;
         this.resNode = this.node.getChildByName("resNode");
         if(confige.joinState == true)
             this.newJoinRoom();
@@ -24,8 +25,8 @@ cc.Class({
         confige.curGameScene = this;
         gameData.gameMainScene = this;
 
-        console.log(cc.director.getVisibleSize());
-        cc.view.setDesignResolutionSize(cc.director.getVisibleSize().width,cc.director.getVisibleSize().height,cc.ResolutionPolicy.EXACT_FIT);
+        // console.log(cc.director.getVisibleSize());
+        // cc.view.setDesignResolutionSize(cc.director.getVisibleSize().width,cc.director.getVisibleSize().height,cc.ResolutionPolicy.EXACT_FIT);
     },
 
     newJoinRoom:function(){
@@ -49,50 +50,66 @@ cc.Class({
             document.title = "熟人九人牛牛(房间号:" + roomIdStr + ")";
         }
 
-        this.playerNode = this.node.getChildByName("playerNode");
-        this.infoNode = this.node.getChildByName("infoNode");
+        // this.playerNode = this.node.getChildByName("playerNode");
+        // this.infoNode = this.node.getChildByName("infoNode");
         this.playerLoadOK = false;
         this.infoLoadOK = false;
         this.doLaterLoad = false;
-        var self = this;
-        cc.loader.loadRes("prefabs/roomInfoNode"+loadResType, cc.Prefab, function (err, prefabs) {
-            console.log("gameInfoNode load!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            var newLayer = cc.instantiate(prefabs);
-            self.infoNode.addChild(newLayer);
-            self.gameInfoNode = newLayer.getComponent("gameInfoNode");
-            self.gameInfoNode.onInit();
-            self.infoLoadOK = true;
-            if(self.playerLoadOK == true && self.infoLoadOK == true)
-            {
-                if(self.doLaterLoad == false)
-                {
-                    self.doLaterLoad = true;
-                    self.loadRes1();
-                    // self.loadLater();
-                    // self.startLater();
-                    // self.loadRes2();
-                }
-            }
-        });
-        cc.loader.loadRes("prefabs/playerNode"+loadResType, cc.Prefab, function (err, prefabs) {
-            console.log("gamePlayerNode load!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            var newLayer = cc.instantiate(prefabs);
-            self.playerNode.addChild(newLayer);
-            self.gamePlayerNode = newLayer.getComponent("gamePlayerNode");
-            self.gamePlayerNode.onInit();
-            self.playerLoadOK = true;
-            if(self.playerLoadOK == true && self.infoLoadOK == true)
-            {
-                if(self.doLaterLoad == false)
-                {
-                    self.doLaterLoad = true;
-                    self.loadRes1();
-                    // self.loadLater();
-                    // self.startLater();
-                    // self.loadRes2();
-                }
-            }
-        });
+
+        this.playerNode1 = this.node.getChildByName("playerNode1");
+        if(loadResType == 1)
+        {
+            this.gamePlayerNode = this.node.getChildByName("playerNode1").getComponent("gamePlayerNode");
+            this.gameInfoNode = this.node.getChildByName("roomInfoNode1").getComponent("gameInfoNode");
+        }else{
+            this.gamePlayerNode = this.node.getChildByName("playerNode2").getComponent("gamePlayerNode");
+            this.gameInfoNode = this.node.getChildByName("roomInfoNode2").getComponent("gameInfoNode");
+        }
+        this.gamePlayerNode.node.active = true;
+        this.gameInfoNode.node.active = true;
+        this.gamePlayerNode.onInit();
+        this.gameInfoNode.onInit();
+        this.doLaterLoad = true;
+        this.loadRes1();
+        // var self = this;
+        // cc.loader.loadRes("prefabs/roomInfoNode"+loadResType, cc.Prefab, function (err, prefabs) {
+        //     console.log("gameInfoNode load!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //     var newLayer = cc.instantiate(prefabs);
+        //     self.infoNode.addChild(newLayer);
+        //     self.gameInfoNode = newLayer.getComponent("gameInfoNode");
+        //     self.gameInfoNode.onInit();
+        //     self.infoLoadOK = true;
+        //     if(self.playerLoadOK == true && self.infoLoadOK == true)
+        //     {
+        //         if(self.doLaterLoad == false)
+        //         {
+        //             self.doLaterLoad = true;
+        //             self.loadRes1();
+        //             // self.loadLater();
+        //             // self.startLater();
+        //             // self.loadRes2();
+        //         }
+        //     }
+        // });
+        // cc.loader.loadRes("prefabs/playerNode"+loadResType, cc.Prefab, function (err, prefabs) {
+        //     console.log("gamePlayerNode load!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //     var newLayer = cc.instantiate(prefabs);
+        //     self.playerNode.addChild(newLayer);
+        //     self.gamePlayerNode = newLayer.getComponent("gamePlayerNode");
+        //     self.gamePlayerNode.onInit();
+        //     self.playerLoadOK = true;
+        //     if(self.playerLoadOK == true && self.infoLoadOK == true)
+        //     {
+        //         if(self.doLaterLoad == false)
+        //         {
+        //             self.doLaterLoad = true;
+        //             self.loadRes1();
+        //             // self.loadLater();
+        //             // self.startLater();
+        //             // self.loadRes2();
+        //         }
+        //     }
+        // });
 
         console.log("gameScene Load!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     },
@@ -531,25 +548,26 @@ cc.Class({
                 }
             }
             console.log("onServerBeginBetting444444");
-        };
-        
-        if(this.isMingCardQZ)
-        {
-            this.robBtnBox.active = false;
-            if(this.joinLate == false && bankerChair != this.meChair)
-                this.betBtnBox.active = true;
-            for(var i in confige.roomPlayer)
+
+            if(self.isMingCardQZ)
             {
-                if(confige.roomPlayer[i].isActive == true && confige.roomPlayer[i].isReady == true)
+                self.robBtnBox.active = false;
+                if(self.joinLate == false && bankerChair != self.meChair)
+                    self.betBtnBox.active = true;
+                for(var i in confige.roomPlayer)
                 {
-                    var curIndex = confige.getCurChair(i);
-                    if(i != bankerChair){
-                        this.gamePlayerNode.robNumNodeList[curIndex].active = false;
-                        this.gamePlayerNode.noRobImgList[curIndex].active = false;
+                    if(confige.roomPlayer[i].isActive == true && confige.roomPlayer[i].isReady == true)
+                    {
+                        var curIndex = confige.getCurChair(i);
+                        if(i != bankerChair){
+                            self.gamePlayerNode.robNumNodeList[curIndex].active = false;
+                            self.gamePlayerNode.noRobImgList[curIndex].active = false;
+                        }
                     }
                 }
             }
-        }
+        };
+        
         this.gamePlayerNode.runBankerAni(confige.getCurChair(data.banker),callFunc);
     },
 
@@ -1273,63 +1291,64 @@ cc.Class({
     },
 
     endRob:function(data){
-        return;
-        var bankerChair = data.banker;
+        console.log("fuck you !!!!!!");
+        // return;
+        // var bankerChair = data.banker;
 
-        this.allBetNum = 0;
-        this.myBetNum = 0;
+        // this.allBetNum = 0;
+        // this.myBetNum = 0;
 
-        console.log("fuck joinLate =====!!!!!!!!!" + this.joinLate);
-        this.statusChange(1);
-        console.log("onServerBeginBetting111111");
-        this.curBankerChair = bankerChair;
-        if(bankerChair == this.meChair)
-            this.showGameStatus(3);
-        else
-            this.showGameStatus(2);
+        // console.log("fuck joinLate =====!!!!!!!!!" + this.joinLate);
+        // this.statusChange(1);
+        // console.log("onServerBeginBetting111111");
+        // this.curBankerChair = bankerChair;
+        // if(bankerChair == this.meChair)
+        //     this.showGameStatus(3);
+        // else
+        //     this.showGameStatus(2);
       
-        console.log("onServerBeginBetting222222");
-        if(bankerChair != -1)
-        {
-            this.gamePlayerNode.bankerImgList[confige.getCurChair(bankerChair)].active = true;
-            this.gamePlayerNode.lightBgList[confige.getCurChair(bankerChair)].active = true;
-        }
-        if(this.isMingCardQZ)
-        {
-            this.robBtnBox.active = false;
-            if(this.joinLate == false && bankerChair != this.meChair)
-                this.betBtnBox.active = true;
-            for(var i in confige.roomPlayer)
-            {
-                if(confige.roomPlayer[i].isActive == true && confige.roomPlayer[i].isReady == true)
-                {
-                    var curIndex = confige.getCurChair(i);
-                    if(i != bankerChair){
-                        this.gamePlayerNode.robNumNodeList[curIndex].active = false;
-                        this.gamePlayerNode.noRobImgList[curIndex].active = false;
-                    }
-                }
-            }
-        }
-        console.log("onServerBeginBetting333333");
-        if(this.joinLate == false)
-        {
-            console.log("onServerBeginBetting311");
-        }else{
-            if(this.joinState == 1005 &&  this.cardMode == 2)
-            {
-                for(var i in confige.roomPlayer)
-                {
-                    if(confige.roomPlayer[i].isActive == true && confige.roomPlayer[i].isReady == true)
-                    {
-                        var curChair = confige.getCurChair(i);
-                        if(curChair != 0)
-                            this.playerHandCardList[curChair].showCardBackWithCount(3);
-                    }
-                }
-            }
-        }
-        console.log("onServerBeginBetting444444");
+        // console.log("onServerBeginBetting222222");
+        // if(bankerChair != -1)
+        // {
+        //     this.gamePlayerNode.bankerImgList[confige.getCurChair(bankerChair)].active = true;
+        //     this.gamePlayerNode.lightBgList[confige.getCurChair(bankerChair)].active = true;
+        // }
+        // if(this.isMingCardQZ)
+        // {
+        //     this.robBtnBox.active = false;
+        //     if(this.joinLate == false && bankerChair != this.meChair)
+        //         this.betBtnBox.active = true;
+        //     for(var i in confige.roomPlayer)
+        //     {
+        //         if(confige.roomPlayer[i].isActive == true && confige.roomPlayer[i].isReady == true)
+        //         {
+        //             var curIndex = confige.getCurChair(i);
+        //             if(i != bankerChair){
+        //                 this.gamePlayerNode.robNumNodeList[curIndex].active = false;
+        //                 this.gamePlayerNode.noRobImgList[curIndex].active = false;
+        //             }
+        //         }
+        //     }
+        // }
+        // console.log("onServerBeginBetting333333");
+        // if(this.joinLate == false)
+        // {
+        //     console.log("onServerBeginBetting311");
+        // }else{
+        //     if(this.joinState == 1005 &&  this.cardMode == 2)
+        //     {
+        //         for(var i in confige.roomPlayer)
+        //         {
+        //             if(confige.roomPlayer[i].isActive == true && confige.roomPlayer[i].isReady == true)
+        //             {
+        //                 var curChair = confige.getCurChair(i);
+        //                 if(curChair != 0)
+        //                     this.playerHandCardList[curChair].showCardBackWithCount(3);
+        //             }
+        //         }
+        //     }
+        // }
+        // console.log("onServerBeginBetting444444");
     },
     // loadRes2:function(){
     //     var self = this;
@@ -1403,51 +1422,73 @@ cc.Class({
             pomelo.request("connector.entryHandler.getRoomInfo", {"roomId" : confige.h5RoomID}, function(data) {
                 console.log("dealGetRoomInfo@@@@@"+confige.h5RoomID);
                 console.log(data);
-                self.roomInfoLayer.active = true;
-                self.labelBasic.string = "底分：" + data.basic+"分"
-                if(data.gameType == "mingpaiqz")
-                    self.labelMode.string ="模式：" + "明牌抢庄";
-                if(data.awardType == 0)
-                    self.labelRule.string = "规则：牛牛x3牛九x2牛八x2 ";
-                else if(data.awardType == 1)
-                    self.labelRule.string = "规则：牛牛x4牛九x3牛八x2牛七x2 ";
-                if(data.gameNumber == 10 || data.gameNumber == 12)
+                if(data.state == 1) //该房间已结算
                 {
-                    self.labelRound.string = "局数：" + data.gameNumber + "局X1房卡";
+                    confige.overData = data;
+                    console.log(confige.overData);
+                    cc.director.loadScene('overScene');
+                    return;
                 }
-                if(data.gameNumber == 20 || data.gameNumber == 24)
+                var isOnGame = false;
+                for(var i in data.playerInfo)
                 {
-                    self.labelRound.string = "局数：" + data.gameNumber + "局X2房卡";
+                    if(data.playerInfo[i].uid == confige.curUseId)
+                        isOnGame = true;
                 }
-                var roomIdStr = data.roomId.toString();
-                roomIdStr = roomIdStr.substring(roomIdStr.length-6,roomIdStr.length);
-                if(data.playerCount == 6)
+                if(isOnGame)
                 {
-                    self.node.getChildByName("gameBg1").active = true;
-                    document.title = "熟人六人牛牛(房间号:" + roomIdStr + ")";
-                }else if(data.playerCount == 9){
-                    self.node.getChildByName("gameBg2").active = true;
-                    document.title = "熟人九人牛牛(房间号:" + roomIdStr + ")";
-                }
-
-                self.labelId.string = "你的大番薯ID:" + confige.curUseId;
-                var newStr = "房间中有";
-                if(data.playerInfo)
-                {
-                    for(var i in data.playerInfo)
-                        newStr = newStr + data.playerInfo[i].nickname + ",";
-                }
-                newStr = newStr + "是否加入?";
-                self.labelPlayer.string = newStr;
-
-                if(data.playerInfo.length == 0)
-                {
-                    self.roomInfoLayer.active = false;
                     pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
                         console.log("join room111111 @@@@@@@@");
                         console.log(confige.h5RoomID);
                     });
+                }else{
+                    self.roomInfoLayer.active = true;
+                    self.labelBasic.string = "底分：" + data.basic+"分"
+                    if(data.gameType == "mingpaiqz")
+                        self.labelMode.string ="模式：" + "明牌抢庄";
+                    if(data.awardType == 0)
+                        self.labelRule.string = "规则：牛牛x3牛九x2牛八x2 ";
+                    else if(data.awardType == 1)
+                        self.labelRule.string = "规则：牛牛x4牛九x3牛八x2牛七x2 ";
+                    if(data.gameNumber == 10 || data.gameNumber == 12)
+                    {
+                        self.labelRound.string = "局数：" + data.gameNumber + "局X1房卡";
+                    }
+                    if(data.gameNumber == 20 || data.gameNumber == 24)
+                    {
+                        self.labelRound.string = "局数：" + data.gameNumber + "局X2房卡";
+                    }
+                    var roomIdStr = data.roomId.toString();
+                    roomIdStr = roomIdStr.substring(roomIdStr.length-6,roomIdStr.length);
+                    if(data.playerCount == 6)
+                    {
+                        self.node.getChildByName("gameBg1").active = true;
+                        document.title = "熟人六人牛牛(房间号:" + roomIdStr + ")";
+                    }else if(data.playerCount == 9){
+                        self.node.getChildByName("gameBg2").active = true;
+                        document.title = "熟人九人牛牛(房间号:" + roomIdStr + ")";
+                    }
+
+                    self.labelId.string = "你的大番薯ID:" + confige.curUseId;
+                    var newStr = "房间中有";
+                    if(data.playerInfo)
+                    {
+                        for(var i in data.playerInfo)
+                            newStr = newStr + data.playerInfo[i].nickname + ",";
+                    }
+                    newStr = newStr + "是否加入?";
+                    self.labelPlayer.string = newStr;
+
+                    if(data.playerInfo.length == 0)
+                    {
+                        self.roomInfoLayer.active = false;
+                        pomelo.clientSend("join",{"roomId":parseInt(confige.h5RoomID)}, function(data) {
+                            console.log("join room111111 @@@@@@@@");
+                            console.log(confige.h5RoomID);
+                        });
+                    }
                 }
+                
             });
         }
     },

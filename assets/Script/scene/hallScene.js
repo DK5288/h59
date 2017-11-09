@@ -45,6 +45,13 @@ cc.Class({
         this.cardNumLabel.string = confige.curDiamond + "张";
         this.nicknameLabel.string = confige.userInfo.nickname;
 
+        var self = this;
+        var callFunc = function(){
+            self.userInfoNode.getChildByName("nameBg").width = self.userInfoNode.getChildByName("nickname").width + 60;
+            self.userInfoNode.getChildByName("cardImg2").width = self.userInfoNode.getChildByName("cardNum").width + 60;
+        };
+        this.scheduleOnce(callFunc,0.1);
+
         confige.getWXHearFrameNoSave(confige.userInfo.head,this.headSprite);
     },
 

@@ -89,6 +89,9 @@ var cfg = function(){
                                 // });
                             }else if(curSceneID == 3 || curSceneID == 4 || curSceneID == 5)
                                 cc.director.loadScene('giftScene');
+
+                            if(curSceneID == 10)
+                                cc.director.loadScene('nativeLoginScene');
                             // if(confige.curReconnectType != confige.ON_OVER)     //当处于结算界面时,不自动跳回大厅界面;
                             // {
                             //     if(confige.enterSceneIndex == 0)

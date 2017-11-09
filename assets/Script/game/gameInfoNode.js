@@ -31,10 +31,14 @@ cc.Class({
             this.roomTime = this.node.getChildByName("topNode").getChildByName("roundLabel").getComponent("cc.Label");
             this.basicLabel = this.node.getChildByName("bottomNode").getChildByName("basicLabel").getComponent("cc.Label");
             this.diamondLabel = this.node.getChildByName("topNode").getChildByName("cardNum").getComponent("cc.Label");
+
+            this.node.getChildByName("topNode").getChildByName("cardImg2").width = this.node.getChildByName("topNode").getChildByName("cardNum").width + 80;
         }else{
             this.roomTime = this.node.getChildByName("topNode").getChildByName("roundLabel").getComponent("cc.Label");
             this.basicLabel = this.node.getChildByName("topNode").getChildByName("basicLabel").getComponent("cc.Label");
             this.diamondLabel = this.node.getChildByName("bottomNode").getChildByName("cardNum").getComponent("cc.Label");
+
+            this.node.getChildByName("bottomNode").getChildByName("cardImg2").width = this.node.getChildByName("bottomNode").getChildByName("cardNum").width + 80;
         }
         this.diamondLabel.string = "" + confige.curDiamond + "张";
         this.basicLabel.string = "底分："+confige.roomData.basic+"分";

@@ -35,12 +35,16 @@ cc.Class({
             var Time1 = curDate.getFullYear()+"-"+(parseInt(curDate.getMonth())+1)+"-"+curDate.getDate();
             var Time2 = curDate.getHours()+":"+curDate.getMinutes()+":"+curDate.getSeconds();
             this.time.string = "" + Time1 + "   " + Time2;
-            this.roomround.string = ""+confige.overData.maxGameNumber+"局";
+            if(confige.overData.maxGameNumber)
+                this.roomround.string = ""+confige.overData.maxGameNumber+"局";
+            if(confige.overData.gameNumber)
+                this.roomround.string = ""+confige.overData.gameNumber+"局";
         }
     },
 
     onInitWithData:function(overData){
         console.log("onInitWithData@@@@@@@@@@@@@@");
+        console.log(overData);
         var itemList = {};
         var newOverItemCount = 0;
         var maxScore = 0;
@@ -48,8 +52,31 @@ cc.Class({
         for(var i in overData)
         {
             var newPlayerData = overData[i];
-            if(newPlayerData.isActive == true)
+            if(newPlayerData.isActive)
             {
+                if(newPlayerData.isActive == true)
+                {
+                    newOverItemCount ++;
+                    var newOverItem = cc.instantiate(this.oriItem);
+                    itemList[i] = newOverItem;
+                    this.overContent.addChild(newOverItem);
+                    newOverItem.y = this.beginY + this.offsetY * i;
+                    if(newPlayerData.score > maxScore)
+                    {
+                        maxScore = newPlayerData.score;
+                        maxIndex = i;
+                    }
+                    if(newPlayerData.score >= 0)
+                    {
+                        newOverItem.getChildByName("score").color = this.colorWin;
+                        newOverItem.getChildByName("score").getComponent("cc.Label").string = "+"+newPlayerData.score;
+                    }else{
+                        newOverItem.getChildByName("score").color = this.colorLose;
+                        newOverItem.getChildByName("score").getComponent("cc.Label").string = newPlayerData.score;
+                    }
+                    newOverItem.getChildByName("nick").getComponent("cc.Label").string = newPlayerData.playerInfo.nickname;
+                }
+            }else{
                 newOverItemCount ++;
                 var newOverItem = cc.instantiate(this.oriItem);
                 itemList[i] = newOverItem;
@@ -68,9 +95,10 @@ cc.Class({
                     newOverItem.getChildByName("score").color = this.colorLose;
                     newOverItem.getChildByName("score").getComponent("cc.Label").string = newPlayerData.score;
                 }
-                newOverItem.getChildByName("nick").getComponent("cc.Label").string = newPlayerData.playerInfo.nickname;
+                newOverItem.getChildByName("nick").getComponent("cc.Label").string = newPlayerData.name;
             }
         }
+        console.log("maxIndex===="+maxIndex);
         itemList[maxIndex].getChildByName("overWinIco").active = true;
         this.overContent.height = 300 + newOverItemCount * 150;
     },
